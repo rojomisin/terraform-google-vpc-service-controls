@@ -81,18 +81,10 @@ resource "google_access_context_manager_service_perimeter" "regular_service_peri
 
 locals {
   # enforced
-  resource_keys = var.resource_keys != null ? var.resource_keys : var.resources
-  resources = {
-    for rk in local.resource_keys :
-    rk => var.resources[index(local.resource_keys, rk)]
-  }
+  resources = var.resources
 
   # dry-run
-  resource_keys_dry_run = var.resource_keys_dry_run != null ? var.resource_keys_dry_run : var.resources_dry_run
-  resources_dry_run = {
-    for rk in local.resource_keys_dry_run :
-    rk => var.resources_dry_run[index(local.resource_keys_dry_run, rk)]
-  }
+  resources_dry_run = var.resources_dry_run
 }
 
 resource "google_access_context_manager_service_perimeter_resource" "service_perimeter_resource" {

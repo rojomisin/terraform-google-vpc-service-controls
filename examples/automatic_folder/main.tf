@@ -25,9 +25,10 @@ data "google_project" "in_perimeter_folder" {
 }
 
 locals {
-  projects     = compact(data.google_project.in_perimeter_folder[*].number)
-  parent_id    = var.org_id
-  watcher_name = replace("${var.policy_name}-manager", "_", "-")
+  projects_list = compact(data.google_project.in_perimeter_folder[*].number)
+  projects      = { for idx, proj in local.projects_list : "project_${idx}" => proj }
+  parent_id     = var.org_id
+  watcher_name  = replace("${var.policy_name}-manager", "_", "-")
 }
 
 module "access_context_manager_policy" {

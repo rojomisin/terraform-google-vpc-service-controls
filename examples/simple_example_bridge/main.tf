@@ -30,9 +30,9 @@ module "bridge_service_perimeter_1" {
   perimeter_name = "bridge_perimeter_1"
   description    = "Some description"
 
-  resources = concat(
-    module.regular_service_perimeter_1.shared_resources["all"],
-    module.regular_service_perimeter_2.shared_resources["all"],
+  resources = merge(
+    { for idx, res in module.regular_service_perimeter_1.shared_resources["all"] : "perimeter1_${idx}" => res },
+    { for idx, res in module.regular_service_perimeter_2.shared_resources["all"] : "perimeter2_${idx}" => res }
   )
 }
 
@@ -43,7 +43,7 @@ module "regular_service_perimeter_1" {
   policy         = module.access_context_manager_policy.policy_id
   perimeter_name = "regular_perimeter_1"
   description    = "Some description"
-  resources      = [var.protected_project_ids["number"]]
+  resources      = { protected = var.protected_project_ids["number"] }
 
   restricted_services = ["bigquery.googleapis.com", "storage.googleapis.com"]
 
@@ -59,7 +59,7 @@ module "regular_service_perimeter_2" {
   policy         = module.access_context_manager_policy.policy_id
   perimeter_name = "regular_perimeter_2"
   description    = "Some description"
-  resources      = [var.public_project_ids["number"]]
+  resources      = { public = var.public_project_ids["number"] }
 
   restricted_services = ["storage.googleapis.com"]
 

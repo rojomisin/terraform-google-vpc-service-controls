@@ -15,8 +15,8 @@
  */
 
 locals {
-  egress_policies_dry_run = [
-    {
+  egress_policies_dry_run = {
+    rule_one = {
       title = "dry-run"
       from = {
         sources = {
@@ -38,8 +38,8 @@ locals {
           }
         }
       }
-    },
-  ]
+    }
+  }
 }
 
 module "access_context_manager_policy" {
@@ -94,16 +94,16 @@ module "regular_service_perimeter_1" {
   perimeter_name = var.perimeter_name
 
   description           = "Perimeter shielding bigquery project"
-  resources             = [var.protected_project_ids["number"]]
-  resources_dry_run     = [var.protected_project_ids["number"]]
+  resources             = { protected = var.protected_project_ids["number"] }
+  resources_dry_run     = { protected = var.protected_project_ids["number"] }
   access_levels         = [module.access_level_members.name]
   access_levels_dry_run = [module.access_level_members_dry_run.name]
 
 
   restricted_services = ["bigquery.googleapis.com", "storage.googleapis.com"]
 
-  egress_policies = [
-    {
+  egress_policies = {
+    read_outside_buckets_from_project = {
       title = "Read outside buckets from project"
       from = {
         sources = {
@@ -124,8 +124,8 @@ module "regular_service_perimeter_1" {
           }
         }
       }
-    },
-    {
+    }
+    use_permissions_for_big_query_access = {
       title = "Use permissions for Big Query access" # See https://cloud.google.com/vpc-service-controls/docs/supported-method-restrictions
       from = {
         sources = {
@@ -151,11 +151,10 @@ module "regular_service_perimeter_1" {
           }
         }
       }
-    },
-  ]
+    }
+  }
 
-  egress_policies_dry_run      = distinct(tolist(local.egress_policies_dry_run))
-  egress_policies_keys_dry_run = ["rule_one"]
+  egress_policies_dry_run = local.egress_policies_dry_run
 
   shared_resources = {
     all = [var.protected_project_ids["number"]]

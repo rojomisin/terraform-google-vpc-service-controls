@@ -16,34 +16,12 @@
 
 locals {
   # enforced
-  # ingress_rules
-  ingress_policies_keys = var.ingress_policies_keys != null ? var.ingress_policies_keys : [for k, v in var.ingress_policies : tostring(k)]
-  ingress_policies = {
-    for ipk in local.ingress_policies_keys :
-    ipk => var.ingress_policies[index(local.ingress_policies_keys, ipk)]
-  }
-
-  # egress_rules
-  egress_policies_keys = var.egress_policies_keys != null ? var.egress_policies_keys : [for k, v in var.egress_policies : tostring(k)]
-  egress_policies = {
-    for epk in local.egress_policies_keys :
-    epk => var.egress_policies[index(local.egress_policies_keys, epk)]
-  }
+  ingress_policies = var.ingress_policies
+  egress_policies  = var.egress_policies
 
   # dry-run
-  # ingress_rules
-  ingress_policies_keys_dry_run = var.ingress_policies_keys_dry_run != null ? var.ingress_policies_keys_dry_run : [for k, v in var.ingress_policies_dry_run : tostring(k)]
-  ingress_policies_dry_run = {
-    for ipk in local.ingress_policies_keys_dry_run :
-    ipk => var.ingress_policies_dry_run[index(local.ingress_policies_keys_dry_run, ipk)]
-  }
-
-  # egress_rules
-  egress_policies_keys_dry_run = var.egress_policies_keys_dry_run != null ? var.egress_policies_keys_dry_run : [for k, v in var.egress_policies_dry_run : tostring(k)]
-  egress_policies_dry_run = {
-    for epk in local.egress_policies_keys_dry_run :
-    epk => var.egress_policies_dry_run[index(local.egress_policies_keys_dry_run, epk)]
-  }
+  ingress_policies_dry_run = var.ingress_policies_dry_run
+  egress_policies_dry_run  = var.egress_policies_dry_run
 }
 
 resource "google_access_context_manager_service_perimeter_ingress_policy" "ingress_policies" {

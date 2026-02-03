@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this
 project adheres to [Semantic Versioning](http://semver.org/).
 
+## [8.0.0](https://github.com/terraform-google-modules/terraform-google-vpc-service-controls/compare/v7.2.0...v8.0.0) (2026-02-03)
+
+
+### ⚠ BREAKING CHANGES
+
+* **variables:** Convert list-based inputs to maps for stable Terraform state keys
+  - `resources`, `resources_dry_run` changed from `list(string)` to `map(string)`
+  - `ingress_policies`, `egress_policies`, `ingress_policies_dry_run`, `egress_policies_dry_run` changed from `list(object(...))` to `map(object(...))`
+  - Removed variables: `resource_keys`, `resource_keys_dry_run`, `ingress_policies_keys`, `egress_policies_keys`, `ingress_policies_keys_dry_run`, `egress_policies_keys_dry_run`
+  - See [upgrading guide](./docs/upgrading_to_v8.0.md) for migration instructions
+
+### Features
+
+* **variables:** Use map-based inputs to prevent resource shuffling when modifying policies. Map keys provide stable resource identifiers, eliminating cascading replacements when inserting, removing, or reordering policies.
+
+
+### Migration
+
+Users must convert list inputs to maps. For example:
+- `resources = ["projects/123"]` becomes `resources = { project1 = "projects/123" }`
+- Lists of policies must use descriptive keys instead of relying on list indices
+- See full migration guide at [docs/upgrading_to_v8.0.md](./docs/upgrading_to_v8.0.md)
+
 ## [7.2.0](https://github.com/terraform-google-modules/terraform-google-vpc-service-controls/compare/v7.1.3...v7.2.0) (2025-09-16)
 
 

@@ -49,7 +49,7 @@ module "regular_service_perimeter_1" {
   perimeter_name = var.perimeter_name
 
   description = "Perimeter shielding bigquery project ${null_resource.wait_for_members.id}"
-  resources   = [var.protected_project_ids["number"]]
+  resources   = { protected = var.protected_project_ids["number"] }
 
   access_levels       = [module.access_level_members.name]
   restricted_services = ["bigquery.googleapis.com", "storage.googleapis.com"]

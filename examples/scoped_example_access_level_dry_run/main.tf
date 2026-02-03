@@ -61,11 +61,11 @@ module "regular_service_perimeter_1" {
   perimeter_name = "regular_perimeter_1_dry_run"
   description    = "Some description"
 
-  resources           = [var.protected_project_number]
+  resources           = { protected = var.protected_project_number }
   restricted_services = ["bigquery.googleapis.com", "storage.googleapis.com"]
   access_levels       = [module.access_level_1.name]
 
-  resources_dry_run           = [var.protected_project_number]
+  resources_dry_run           = { protected = var.protected_project_number }
   restricted_services_dry_run = ["storage.googleapis.com"]
   access_levels_dry_run       = [module.access_level_2.name]
 

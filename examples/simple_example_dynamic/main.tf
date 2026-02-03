@@ -30,8 +30,11 @@ module "bridge" {
   perimeter_name = "bridge_perimeter_1"
   description    = "Some description"
 
-  resources     = [module.project_one.project_number, module.project_two.project_number, module.project_three.project_number]
-  resource_keys = ["one", "two", "three"]
+  resources = {
+    one   = module.project_one.project_number
+    two   = module.project_two.project_number
+    three = module.project_three.project_number
+  }
 
   depends_on = [
     module.regular_service_perimeter_1,
@@ -46,7 +49,7 @@ module "regular_service_perimeter_1" {
   policy         = module.access_context_manager_policy.policy_id
   perimeter_name = "regular_perimeter_1"
   description    = "Some description"
-  resources      = [module.project_one.project_number]
+  resources      = { one = module.project_one.project_number }
 
   restricted_services = ["bigquery.googleapis.com", "storage.googleapis.com"]
 
@@ -62,8 +65,10 @@ module "regular_service_perimeter_2" {
   policy         = module.access_context_manager_policy.policy_id
   perimeter_name = "regular_perimeter_2"
   description    = "Some description"
-  resources      = [module.project_two.project_number, module.project_three.project_number]
-  resource_keys  = ["two", "three"]
+  resources = {
+    two   = module.project_two.project_number
+    three = module.project_three.project_number
+  }
 
   restricted_services = ["storage.googleapis.com"]
 

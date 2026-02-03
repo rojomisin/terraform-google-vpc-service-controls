@@ -39,7 +39,7 @@ module "regular_service_perimeter_1" {
   policy         = module.access_context_manager_policy.policy_id
   perimeter_name = "regular_perimeter_1"
   description    = "Some description"
-  resources      = [var.protected_project_id]
+  resources      = { protected = var.protected_project_id }
 
   restricted_services = ["bigquery.googleapis.com", "storage.googleapis.com"]
 
